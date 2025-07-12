@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LojaExemplo - Sua Loja</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #764ba2;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #764ba2;
+        }
+
+        .cart-btn {
+            background: #764ba2;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.3s ease;
+        }
+
+        .cart-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        .section {
+            display: none;
+            background: white;
+            margin: 2rem 0;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            background: white;
+            color: #764ba2;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #999;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .product-info p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: #764ba2;
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background: #5a3780;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #764ba2;
+        }
+
+        .submit-btn {
+            background: #764ba2;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #5a3780;
+        }
+
+        /* Cart */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #764ba2;
+            margin-top: 1rem;
+            text-align: right;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #764ba2;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #764ba2;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">TechStore</a>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showSection('home')">Início</a></li>
+                <li><a href="#" onclick="showSection('products')">Produtos</a></li>
+                <li><a href="#" onclick="showSection('about')">Sobre</a></li>
+                <li><a href="#" onclick="showSection('contact')">Contato</a></li>
+                <li><a href="#" onclick="showSection('terms')">Termos</a></li>
+            </ul>
+            <button class="cart-btn" onclick="showSection('cart')">
+                🛒 Carrinho (<span id="cart-count">0</span>)
+            </button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <h1>Bem-vindo à TechStore</h1>
+                <p>Os melhores produtos de tecnologia com preços incríveis</p>
+                <a href="#" class="cta-btn" onclick="showSection('products')">Ver Produtos</a>
+            </div>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">📱</div>
+                    <div class="product-info">
+                        <h3>Smartphones</h3>
+                        <p>Últimos lançamentos em smartphones</p>
+                        <div class="product-price">A partir de R$ 899</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">💻</div>
+                    <div class="product-info">
+                        <h3>Notebooks</h3>
+                        <p>Notebooks para trabalho e jogos</p>
+                        <div class="product-price">A partir de R$ 1.999</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">🎧</div>
+                    <div class="product-info">
+                        <h3>Acessórios</h3>
+                        <p>Fones, capas e muito mais</p>
+                        <div class="product-price">A partir de R$ 49</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="section">
+            <h2>Nossos Produtos</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">📱</div>
+                    <div class="product-info">
+                        <h3>iPhone 15 Pro</h3>
+                        <p>O mais avançado iPhone com chip A17 Pro</p>
+                        <div class="product-price">R$ 8.999</div>
+                        <button class="add-to-cart" onclick="addToCart('iPhone 15 Pro', 8999)">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">📱</div>
+                    <div class="product-info">
+                        <h3>Samsung Galaxy S24</h3>
+                        <p>Smartphone Android com IA integrada</p>
+                        <div class="product-price">R$ 4.999</div>
+                        <button class="add-to-cart" onclick="addToCart('Samsung Galaxy S24', 4999)">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">💻</div>
+                    <div class="product-info">
+                        <h3>MacBook Pro M3</h3>
+                        <p>Notebook profissional com chip M3</p>
+                        <div class="product-price">R$ 12.999</div>
+                        <button class="add-to-cart" onclick="addToCart('MacBook Pro M3', 12999)">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">💻</div>
+                    <div class="product-info">
+                        <h3>Dell XPS 13</h3>
+                        <p>Ultrabook compacto e potente</p>
+                        <div class="product-price">R$ 6.999</div>
+                        <button class="add-to-cart" onclick="addToCart('Dell XPS 13', 6999)">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">🎧</div>
+                    <div class="product-info">
+                        <h3>AirPods Pro 2</h3>
+                        <p>Fones com cancelamento de ruído</p>
+                        <div class="product-price">R$ 1.999</div>
+                        <button class="add-to-cart" onclick="addToCart('AirPods Pro 2', 1999)">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">⌚</div>
+                    <div class="product-info">
+                        <h3>Apple Watch Series 9</h3>
+                        <p>Smartwatch com GPS e monitoramento</p>
+                        <div class="product-price">R$ 2.999</div>
+                        <button class="add-to-cart" onclick="addToCart('Apple Watch Series 9', 2999)">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <h2>Sobre a TechStore</h2>
+            <p>A TechStore é uma loja especializada em produtos de tecnologia, oferecendo os melhores dispositivos e acessórios do mercado. Desde 2020, temos o compromisso de trazer inovação e qualidade para nossos clientes.</p>
+            
+            <h3>Nossa Missão</h3>
+            <p>Democratizar o acesso à tecnologia de ponta, oferecendo produtos de qualidade com preços justos e atendimento excepcional.</p>
+            
+            <h3>Por que escolher a TechStore?</h3>
+            <ul>
+                <li>Produtos originais e garantia</li>
+                <li>Preços competitivos</li>
+                <li>Entrega rápida e segura</li>
+                <li>Atendimento especializado</li>
+                <li>Suporte técnico completo</li>
+            </ul>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <h2>Entre em Contato</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div>
+                    <h3>Informações de Contato</h3>
+                    <p><strong>Endereço:</strong> Rua da Tecnologia, 123 - Centro, São Paulo - SP</p>
+                    <p><strong>Telefone:</strong> (11) 9999-9999</p>
+                    <p><strong>E-mail:</strong> contato@techstore.com.br</p>
+                    <p><strong>WhatsApp:</strong> (11) 99999-9999</p>
+                    
+                    <h3>Horário de Atendimento</h3>
+                    <p>Segunda a Sexta: 9h às 18h</p>
+                    <p>Sábado: 9h às 14h</p>
+                    <p>Domingo: Fechado</p>
+                </div>
+                
+                <div>
+                    <h3>Envie sua Mensagem</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Nome:</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail:</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Assunto:</label>
+                            <select id="subject" name="subject">
+                                <option value="">Selecione um assunto</option>
+                                <option value="duvida">Dúvida sobre produto</option>
+                                <option value="suporte">Suporte técnico</option>
+                                <option value="reclamacao">Reclamação</option>
+                                <option value="sugestao">Sugestão</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Mensagem:</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Enviar Mensagem</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Terms Section -->
+        <section id="terms" class="section">
+            <h2>Termos de Uso e Política de Privacidade</h2>
+            
+            <h3>1. Termos de Uso</h3>
+            <p>Ao utilizar nosso site e serviços, você concorda com os seguintes termos:</p>
+            <ul>
+                <li>Todas as informações fornecidas devem ser verdadeiras e precisas</li>
+                <li>É proibido o uso do site para atividades ilegais</li>
+                <li>Reservamos o direito de modificar estes termos a qualquer momento</li>
+                <li>O usuário é responsável pela segurança de sua conta</li>
+            </ul>
+            
+            <h3>2. Política de Compras</h3>
+            <p><strong>Pagamento:</strong> Aceitamos cartões de crédito, débito, PIX e boleto bancário.</p>
+            <p><strong>Entrega:</strong> Realizamos entregas em todo o Brasil. Prazo varia de 3 a 15 dias úteis.</p>
+            <p><strong>Garantia:</strong> Todos os produtos possuem garantia do fabricante.</p>
+            
+            <h3>3. Política de Troca e Devolução</h3>
+            <p>Você tem até 7 dias para desistir da compra (Código de Defesa do Consumidor) e até 30 dias para trocar produtos com defeito.</p>
+            
+            <h3>4. Política de Privacidade</h3>
+            <p>Seus dados pessoais são protegidos e utilizados apenas para:</p>
+            <ul>
+                <li>Processamento de pedidos</li>
+                <li>Comunicação sobre compras</li>
+                <li>Melhorias em nossos serviços</li>
+                <li>Envio de ofertas (opcional)</li>
+            </ul>
+            
+            <h3>5. Cookies</h3>
+            <p>Utilizamos cookies para melhorar sua experiência de navegação e personalizar conteúdo.</p>
+            
+            <h3>6. Contato</h3>
+            <p>Para dúvidas sobre estes termos, entre em contato através do e-mail: legal@techstore.com.br</p>
+        </section>
+
+        <!-- Cart Section -->
+        <section id="cart" class="section">
+            <h2>Carrinho de Compras</h2>
+            <div id="cart-items">
+                <p>Seu carrinho está vazio.</p>
+            </div>
+            <div class="cart-total" id="cart-total" style="display: none;">
+                Total: R$ <span id="total-amount">0</span>
+            </div>
+            <button class="submit-btn" id="checkout-btn" style="display: none; margin-top: 1rem;" onclick="checkout()">
+                Finalizar Compra
+            </button>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TechStore</h3>
+                    <p>Sua loja de tecnologia de confiança</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Links Úteis</h3>
+                    <a href="#" onclick="showSection('about')">Sobre Nós</a>
+                    <a href="#" onclick="showSection('contact')">Contato</a>
+                    <a href="#" onclick="showSection('terms')">Termos de Uso</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Suporte</h3>
+                    <a href="#">FAQ</a>
+                    <a href="#">Suporte Técnico</a>
+                    <a href="#">Rastreamento</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Redes Sociais</h3>
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+            <p>&copy; 2025 TechStore. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        let cart = [];
+        let cartCount = 0;
+        let cartTotal = 0;
+
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function addToCart(productName, price) {
+            const existingItem = cart.find(item => item.name === productName);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    name: productName,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            
+            // Visual feedback
+            const buttons = document.querySelectorAll('.add-to-cart');
+            buttons.forEach(btn => {
+                if (btn.onclick.toString().includes(productName)) {
+                    btn.style.background = '#4CAF50';
+                    btn.textContent = 'Adicionado!';
+                    setTimeout(() => {
+                        btn.style.background = '#764ba2';
+                        btn.textContent = 'Adicionar ao Carrinho';
+                    }, 1000);
+                }
+            });
+        }
+
+        function removeFromCart(productName) {
+            cart = cart.filter(item => item.name !== productName);
+            updateCart();
+        }
+
+        function updateCart() {
+            cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            
+            document.getElementById('cart-count').textContent = cartCount;
+            
+            const cartItems = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Seu carrinho está vazio.</p>';
+                cartTotalElement.style.display = 'none';
+                checkoutBtn.style.display = 'none';
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div>
+                            <h4>${item.name}</h4>
+                            <p>Quantidade: ${item.quantity}</p>
+                            <p>R$ ${item.price.toLocaleString('pt-BR')}</p>
+                        </div>
+                        <button onclick="removeFromCart('${item.name}')" style="background: #ff4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                            Remover
+                        </button>
+                    </div>
+                `).join('');
+                
+                document.getElementById('total-amount').textContent = cartTotal.toLocaleString('pt-BR');
+                cartTotalElement.style.display = 'block';
+                checkoutBtn.style.display = 'block';
+            }
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+            
+            alert(`Compra finalizada! Total: R$ ${cartTotal.toLocaleString('pt-BR')}\n\nObrigado por comprar na TechStore!`);
+            cart = [];
+            updateCart();
+        }
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Mensagem enviada com sucesso! Responderemos em breve.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
