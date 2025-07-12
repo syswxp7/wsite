@@ -1,695 +1,607 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LojaExemplo - Sua Loja</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <title>Ultimate Ninja - Contas Roblox</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
+    body {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #0a0a0a 100%);
+      color: #f5f5f5;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    /* Partículas de fundo */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 80%, rgba(230, 0, 0, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 50, 50, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
 
-        /* Header */
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        }
+    header {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 50%, #1a1a1a 100%);
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 3px solid transparent;
+      border-image: linear-gradient(90deg, #e60000, #ff4444, #e60000) 1;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
+    header h1 {
+      margin: 0;
+      font-size: 3.2em;
+      background: linear-gradient(45deg, #e60000, #ff4444, #ff6666);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+      text-shadow: 0 0 30px rgba(230, 0, 0, 0.5);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #764ba2;
-            text-decoration: none;
-        }
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 10px rgba(230, 0, 0, 0.5)); }
+      to { filter: drop-shadow(0 0 20px rgba(230, 0, 0, 0.8)); }
+    }
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
+    nav {
+      margin-top: 25px;
+    }
 
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
+    nav a {
+      display: inline-block;
+      color: #f5f5f5;
+      text-decoration: none;
+      margin: 0 20px;
+      font-weight: bold;
+      font-size: 1.3em;
+      padding: 16px 30px;
+      border: 2px solid transparent;
+      border-radius: 50px;
+      background: linear-gradient(45deg, rgba(230, 0, 0, 0.1), rgba(255, 68, 68, 0.1));
+      backdrop-filter: blur(5px);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
 
-        .nav-links a:hover {
-            color: #764ba2;
-        }
+    nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
 
-        .cart-btn {
-            background: #764ba2;
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: transform 0.3s ease;
-        }
+    nav a:hover::before {
+      left: 100%;
+    }
 
-        .cart-btn:hover {
-            transform: translateY(-2px);
-        }
+    nav a:hover {
+      background: linear-gradient(45deg, #e60000, #ff4444);
+      border-color: #ff4444;
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(230, 0, 0, 0.4);
+    }
 
-        /* Main Content */
-        main {
-            margin-top: 80px;
-            padding: 2rem 0;
-        }
+    .section {
+      display: none;
+      padding: 50px 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
 
-        .section {
-            display: none;
-            background: white;
-            margin: 2rem 0;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
+    .section.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-        .section.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in-out;
-        }
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, rgba(230, 0, 0, 0.1), rgba(255, 68, 68, 0.05));
+      border-radius: 20px;
+      margin-bottom: 50px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(230, 0, 0, 0.2);
+      animation: fadeInUp 1s ease forwards;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .hero h2 {
+      background: linear-gradient(45deg, #e60000, #ff4444, #ff6666);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 2.8em;
+      margin-bottom: 20px;
+      animation: slideInFromTop 1s ease forwards;
+    }
 
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-        }
+    .hero p {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.3em;
+      line-height: 1.7;
+      color: #ddd;
+      animation: slideInFromBottom 1s ease forwards 0.3s;
+      opacity: 0;
+    }
 
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+    .category {
+      margin-bottom: 70px;
+      background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(42, 26, 26, 0.6));
+      padding: 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(230, 0, 0, 0.1);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
 
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
+    .category h2 {
+      border-left: 6px solid #e60000;
+      padding-left: 20px;
+      font-size: 2.2em;
+      margin-bottom: 30px;
+      background: linear-gradient(45deg, #e60000, #ff4444);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+    }
 
-        .cta-btn {
-            background: white;
-            color: #764ba2;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
+    .category h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 20px;
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, #e60000, #ff4444);
+      border-radius: 2px;
+    }
 
-        .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 35px;
+    }
 
-        /* Products Grid */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
+    .card {
+      background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(42, 26, 26, 0.7));
+      border-radius: 15px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(50px) rotateX(15deg);
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
 
-        .product-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #e60000, #ff4444, #e60000);
+      z-index: -1;
+      border-radius: 15px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0) rotateX(0deg);
+    }
 
-        .product-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: #999;
-        }
+    .card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 25px 50px rgba(230, 0, 0, 0.3);
+    }
 
-        .product-info {
-            padding: 1.5rem;
-        }
+    .card:hover::before {
+      opacity: 1;
+    }
 
-        .product-info h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      filter: brightness(0.8);
+    }
 
-        .product-info p {
-            color: #666;
-            margin-bottom: 1rem;
-        }
+    .card:hover img {
+      transform: scale(1.1);
+      filter: brightness(1.1);
+    }
 
-        .product-price {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #764ba2;
-            margin-bottom: 1rem;
-        }
+    .card-content {
+      padding: 25px;
+      position: relative;
+      z-index: 1;
+      background: rgba(26, 26, 26, 0.9);
+      backdrop-filter: blur(10px);
+    }
 
-        .add-to-cart {
-            width: 100%;
-            background: #764ba2;
-            color: white;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background 0.3s ease;
-        }
+    .card-content h3 {
+      margin: 0 0 15px;
+      color: #e60000;
+      font-size: 1.3em;
+      font-weight: 700;
+      transition: color 0.3s ease;
+    }
 
-        .add-to-cart:hover {
-            background: #5a3780;
-        }
+    .card:hover .card-content h3 {
+      color: #ff4444;
+    }
 
-        /* Forms */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+    .card-content p {
+      margin: 0 0 25px;
+      line-height: 1.5;
+      font-size: 1em;
+      color: #ccc;
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
+    .card-content a {
+      display: inline-block;
+      background: linear-gradient(45deg, #e60000, #ff4444);
+      color: #fff;
+      padding: 12px 25px;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(230, 0, 0, 0.3);
+    }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
+    .card-content a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
 
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #764ba2;
-        }
+    .card-content a:hover::before {
+      left: 100%;
+    }
 
-        .submit-btn {
-            background: #764ba2;
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
+    .card-content a:hover {
+      background: linear-gradient(45deg, #ff1a1a, #ff5555);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(230, 0, 0, 0.4);
+    }
 
-        .submit-btn:hover {
-            background: #5a3780;
-        }
+    .contact-info {
+      text-align: center;
+      font-size: 1.3em;
+      line-height: 2.2em;
+      background: linear-gradient(135deg, rgba(230, 0, 0, 0.1), rgba(255, 68, 68, 0.05));
+      padding: 60px 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(230, 0, 0, 0.2);
+      animation: fadeInUp 1s ease forwards;
+    }
 
-        /* Cart */
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid #eee;
-        }
+    .contact-info h2 {
+      background: linear-gradient(45deg, #e60000, #ff4444);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 2.5em;
+      margin-bottom: 30px;
+    }
 
-        .cart-total {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #764ba2;
-            margin-top: 1rem;
-            text-align: right;
-        }
+    .contact-info p {
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(26, 26, 26, 0.5);
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(230, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
 
-        /* Footer */
-        footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
+    .contact-info p:hover {
+      background: rgba(230, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
 
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
+    footer {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 50%, #1a1a1a 100%);
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, #e60000, #ff4444, #e60000) 1;
+      margin-top: 50px;
+      backdrop-filter: blur(10px);
+    }
 
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            color: #764ba2;
-        }
+    footer p {
+      font-size: 1.1em;
+      color: #ccc;
+    }
 
-        .footer-section a {
-            color: #ccc;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s ease;
-        }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        .footer-section a:hover {
-            color: #764ba2;
-        }
+    @keyframes slideInFromTop {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
+    @keyframes slideInFromBottom {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-            .hero h1 {
-                font-size: 2rem;
-            }
+    /* Efeito de partículas flutuantes */
+    .floating-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
 
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(230, 0, 0, 0.5);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    @media(max-width: 768px) {
+      header h1 {
+        font-size: 2.5em;
+      }
+      
+      nav a {
+        margin: 8px 10px;
+        font-size: 1.1em;
+        padding: 12px 20px;
+      }
+      
+      .hero h2 {
+        font-size: 2.2em;
+      }
+      
+      .hero p {
+        font-size: 1.1em;
+      }
+      
+      .category {
+        padding: 30px 20px;
+      }
+      
+      .container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <nav class="container">
-            <a href="#" class="logo">TechStore</a>
-            <ul class="nav-links">
-                <li><a href="#" onclick="showSection('home')">Início</a></li>
-                <li><a href="#" onclick="showSection('products')">Produtos</a></li>
-                <li><a href="#" onclick="showSection('about')">Sobre</a></li>
-                <li><a href="#" onclick="showSection('contact')">Contato</a></li>
-                <li><a href="#" onclick="showSection('terms')">Termos</a></li>
-            </ul>
-            <button class="cart-btn" onclick="showSection('cart')">
-                🛒 Carrinho (<span id="cart-count">0</span>)
-            </button>
-        </nav>
-    </header>
+  <div class="floating-particles"></div>
 
-    <main class="container">
-        <!-- Home Section -->
-        <section id="home" class="section active">
-            <div class="hero">
-                <h1>Bem-vindo à TechStore</h1>
-                <p>Os melhores produtos de tecnologia com preços incríveis</p>
-                <a href="#" class="cta-btn" onclick="showSection('products')">Ver Produtos</a>
-            </div>
-            
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">📱</div>
-                    <div class="product-info">
-                        <h3>Smartphones</h3>
-                        <p>Últimos lançamentos em smartphones</p>
-                        <div class="product-price">A partir de R$ 899</div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">💻</div>
-                    <div class="product-info">
-                        <h3>Notebooks</h3>
-                        <p>Notebooks para trabalho e jogos</p>
-                        <div class="product-price">A partir de R$ 1.999</div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🎧</div>
-                    <div class="product-info">
-                        <h3>Acessórios</h3>
-                        <p>Fones, capas e muito mais</p>
-                        <div class="product-price">A partir de R$ 49</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <header>
+    <h1>Ultimate Ninja</h1>
+    <nav>
+      <a href="#" onclick="showSection('inicio')">Início</a>
+      <a href="#" onclick="showSection('contas')">Contas</a>
+      <a href="#" onclick="showSection('contato')">Contato</a>
+    </nav>
+  </header>
 
-        <!-- Products Section -->
-        <section id="products" class="section">
-            <h2>Nossos Produtos</h2>
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">📱</div>
-                    <div class="product-info">
-                        <h3>iPhone 15 Pro</h3>
-                        <p>O mais avançado iPhone com chip A17 Pro</p>
-                        <div class="product-price">R$ 8.999</div>
-                        <button class="add-to-cart" onclick="addToCart('iPhone 15 Pro', 8999)">Adicionar ao Carrinho</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">📱</div>
-                    <div class="product-info">
-                        <h3>Samsung Galaxy S24</h3>
-                        <p>Smartphone Android com IA integrada</p>
-                        <div class="product-price">R$ 4.999</div>
-                        <button class="add-to-cart" onclick="addToCart('Samsung Galaxy S24', 4999)">Adicionar ao Carrinho</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">💻</div>
-                    <div class="product-info">
-                        <h3>MacBook Pro M3</h3>
-                        <p>Notebook profissional com chip M3</p>
-                        <div class="product-price">R$ 12.999</div>
-                        <button class="add-to-cart" onclick="addToCart('MacBook Pro M3', 12999)">Adicionar ao Carrinho</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">💻</div>
-                    <div class="product-info">
-                        <h3>Dell XPS 13</h3>
-                        <p>Ultrabook compacto e potente</p>
-                        <div class="product-price">R$ 6.999</div>
-                        <button class="add-to-cart" onclick="addToCart('Dell XPS 13', 6999)">Adicionar ao Carrinho</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🎧</div>
-                    <div class="product-info">
-                        <h3>AirPods Pro 2</h3>
-                        <p>Fones com cancelamento de ruído</p>
-                        <div class="product-price">R$ 1.999</div>
-                        <button class="add-to-cart" onclick="addToCart('AirPods Pro 2', 1999)">Adicionar ao Carrinho</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">⌚</div>
-                    <div class="product-info">
-                        <h3>Apple Watch Series 9</h3>
-                        <p>Smartwatch com GPS e monitoramento</p>
-                        <div class="product-price">R$ 2.999</div>
-                        <button class="add-to-cart" onclick="addToCart('Apple Watch Series 9', 2999)">Adicionar ao Carrinho</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <!-- INÍCIO -->
+  <section id="inicio" class="section active">
+    <div class="hero">
+      <h2>Bem-vindo ao Ultimate Ninja</h2>
+      <p>Seu portal para as melhores contas Roblox premium. Evolua em Grow a Garden, Blox Fruits, Jujutsu Infinite, Haze Piece e King Legacy com qualidade, segurança e atendimento rápido. Torne-se o próximo ninja supremo!</p>
+    </div>
+  </section>
 
-        <!-- About Section -->
-        <section id="about" class="section">
-            <h2>Sobre a TechStore</h2>
-            <p>A TechStore é uma loja especializada em produtos de tecnologia, oferecendo os melhores dispositivos e acessórios do mercado. Desde 2020, temos o compromisso de trazer inovação e qualidade para nossos clientes.</p>
-            
-            <h3>Nossa Missão</h3>
-            <p>Democratizar o acesso à tecnologia de ponta, oferecendo produtos de qualidade com preços justos e atendimento excepcional.</p>
-            
-            <h3>Por que escolher a TechStore?</h3>
-            <ul>
-                <li>Produtos originais e garantia</li>
-                <li>Preços competitivos</li>
-                <li>Entrega rápida e segura</li>
-                <li>Atendimento especializado</li>
-                <li>Suporte técnico completo</li>
-            </ul>
-        </section>
+  <!-- CONTAS -->
+  <section id="contas" class="section">
 
-        <!-- Contact Section -->
-        <section id="contact" class="section">
-            <h2>Entre em Contato</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                <div>
-                    <h3>Informações de Contato</h3>
-                    <p><strong>Endereço:</strong> Rua da Tecnologia, 123 - Centro, São Paulo - SP</p>
-                    <p><strong>Telefone:</strong> (11) 9999-9999</p>
-                    <p><strong>E-mail:</strong> contato@techstore.com.br</p>
-                    <p><strong>WhatsApp:</strong> (11) 99999-9999</p>
-                    
-                    <h3>Horário de Atendimento</h3>
-                    <p>Segunda a Sexta: 9h às 18h</p>
-                    <p>Sábado: 9h às 14h</p>
-                    <p>Domingo: Fechado</p>
-                </div>
-                
-                <div>
-                    <h3>Envie sua Mensagem</h3>
-                    <form>
-                        <div class="form-group">
-                            <label for="name">Nome:</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">E-mail:</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Assunto:</label>
-                            <select id="subject" name="subject">
-                                <option value="">Selecione um assunto</option>
-                                <option value="duvida">Dúvida sobre produto</option>
-                                <option value="suporte">Suporte técnico</option>
-                                <option value="reclamacao">Reclamação</option>
-                                <option value="sugestao">Sugestão</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Mensagem:</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="submit-btn">Enviar Mensagem</button>
-                    </form>
-                </div>
-            </div>
-        </section>
+    <!-- GROW A GARDEN -->
+    <div class="category">
+      <h2>Grow a Garden</h2>
+      <div class="container">
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Grow+1" alt=""><div class="card-content"><h3>Conta Grow 1</h3><p>Descrição Grow 1</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Grow+2" alt=""><div class="card-content"><h3>Conta Grow 2</h3><p>Descrição Grow 2</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Grow+3" alt=""><div class="card-content"><h3>Conta Grow 3</h3><p>Descrição Grow 3</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Grow+4" alt=""><div class="card-content"><h3>Conta Grow 4</h3><p>Descrição Grow 4</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Grow+5" alt=""><div class="card-content"><h3>Conta Grow 5</h3><p>Descrição Grow 5</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Grow+6" alt=""><div class="card-content"><h3>Conta Grow 6</h3><p>Descrição Grow 6</p><a href="#">Comprar</a></div></div>
+      </div>
+    </div>
 
-        <!-- Terms Section -->
-        <section id="terms" class="section">
-            <h2>Termos de Uso e Política de Privacidade</h2>
-            
-            <h3>1. Termos de Uso</h3>
-            <p>Ao utilizar nosso site e serviços, você concorda com os seguintes termos:</p>
-            <ul>
-                <li>Todas as informações fornecidas devem ser verdadeiras e precisas</li>
-                <li>É proibido o uso do site para atividades ilegais</li>
-                <li>Reservamos o direito de modificar estes termos a qualquer momento</li>
-                <li>O usuário é responsável pela segurança de sua conta</li>
-            </ul>
-            
-            <h3>2. Política de Compras</h3>
-            <p><strong>Pagamento:</strong> Aceitamos cartões de crédito, débito, PIX e boleto bancário.</p>
-            <p><strong>Entrega:</strong> Realizamos entregas em todo o Brasil. Prazo varia de 3 a 15 dias úteis.</p>
-            <p><strong>Garantia:</strong> Todos os produtos possuem garantia do fabricante.</p>
-            
-            <h3>3. Política de Troca e Devolução</h3>
-            <p>Você tem até 7 dias para desistir da compra (Código de Defesa do Consumidor) e até 30 dias para trocar produtos com defeito.</p>
-            
-            <h3>4. Política de Privacidade</h3>
-            <p>Seus dados pessoais são protegidos e utilizados apenas para:</p>
-            <ul>
-                <li>Processamento de pedidos</li>
-                <li>Comunicação sobre compras</li>
-                <li>Melhorias em nossos serviços</li>
-                <li>Envio de ofertas (opcional)</li>
-            </ul>
-            
-            <h3>5. Cookies</h3>
-            <p>Utilizamos cookies para melhorar sua experiência de navegação e personalizar conteúdo.</p>
-            
-            <h3>6. Contato</h3>
-            <p>Para dúvidas sobre estes termos, entre em contato através do e-mail: legal@techstore.com.br</p>
-        </section>
+    <!-- BLOX FRUITS -->
+    <div class="category">
+      <h2>Blox Fruits</h2>
+      <div class="container">
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Blox+1" alt=""><div class="card-content"><h3>Conta Blox 1</h3><p>Descrição Blox 1</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Blox+2" alt=""><div class="card-content"><h3>Conta Blox 2</h3><p>Descrição Blox 2</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Blox+3" alt=""><div class="card-content"><h3>Conta Blox 3</h3><p>Descrição Blox 3</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Blox+4" alt=""><div class="card-content"><h3>Conta Blox 4</h3><p>Descrição Blox 4</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Blox+5" alt=""><div class="card-content"><h3>Conta Blox 5</h3><p>Descrição Blox 5</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Blox+6" alt=""><div class="card-content"><h3>Conta Blox 6</h3><p>Descrição Blox 6</p><a href="#">Comprar</a></div></div>
+      </div>
+    </div>
 
-        <!-- Cart Section -->
-        <section id="cart" class="section">
-            <h2>Carrinho de Compras</h2>
-            <div id="cart-items">
-                <p>Seu carrinho está vazio.</p>
-            </div>
-            <div class="cart-total" id="cart-total" style="display: none;">
-                Total: R$ <span id="total-amount">0</span>
-            </div>
-            <button class="submit-btn" id="checkout-btn" style="display: none; margin-top: 1rem;" onclick="checkout()">
-                Finalizar Compra
-            </button>
-        </section>
-    </main>
+    <!-- JUJUTSU INFINITE -->
+    <div class="category">
+      <h2>Jujutsu Infinite</h2>
+      <div class="container">
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Jujutsu+1" alt=""><div class="card-content"><h3>Conta Jujutsu 1</h3><p>Descrição Jujutsu 1</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Jujutsu+2" alt=""><div class="card-content"><h3>Conta Jujutsu 2</h3><p>Descrição Jujutsu 2</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Jujutsu+3" alt=""><div class="card-content"><h3>Conta Jujutsu 3</h3><p>Descrição Jujutsu 3</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Jujutsu+4" alt=""><div class="card-content"><h3>Conta Jujutsu 4</h3><p>Descrição Jujutsu 4</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Jujutsu+5" alt=""><div class="card-content"><h3>Conta Jujutsu 5</h3><p>Descrição Jujutsu 5</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Jujutsu+6" alt=""><div class="card-content"><h3>Conta Jujutsu 6</h3><p>Descrição Jujutsu 6</p><a href="#">Comprar</a></div></div>
+      </div>
+    </div>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>TechStore</h3>
-                    <p>Sua loja de tecnologia de confiança</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Links Úteis</h3>
-                    <a href="#" onclick="showSection('about')">Sobre Nós</a>
-                    <a href="#" onclick="showSection('contact')">Contato</a>
-                    <a href="#" onclick="showSection('terms')">Termos de Uso</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Suporte</h3>
-                    <a href="#">FAQ</a>
-                    <a href="#">Suporte Técnico</a>
-                    <a href="#">Rastreamento</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Redes Sociais</h3>
-                    <a href="#">Facebook</a>
-                    <a href="#">Instagram</a>
-                    <a href="#">Twitter</a>
-                </div>
-            </div>
-            <p>&copy; 2025 TechStore. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+    <!-- HAZE PIECE -->
+    <div class="category">
+      <h2>Haze Piece</h2>
+      <div class="container">
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Haze+1" alt=""><div class="card-content"><h3>Conta Haze 1</h3><p>Descrição Haze 1</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Haze+2" alt=""><div class="card-content"><h3>Conta Haze 2</h3><p>Descrição Haze 2</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Haze+3" alt=""><div class="card-content"><h3>Conta Haze 3</h3><p>Descrição Haze 3</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Haze+4" alt=""><div class="card-content"><h3>Conta Haze 4</h3><p>Descrição Haze 4</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Haze+5" alt=""><div class="card-content"><h3>Conta Haze 5</h3><p>Descrição Haze 5</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=Haze+6" alt=""><div class="card-content"><h3>Conta Haze 6</h3><p>Descrição Haze 6</p><a href="#">Comprar</a></div></div>
+      </div>
+    </div>
 
-    <script>
-        let cart = [];
-        let cartCount = 0;
-        let cartTotal = 0;
+    <!-- KING LEGACY -->
+    <div class="category">
+      <h2>King Legacy</h2>
+      <div class="container">
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=King+1" alt=""><div class="card-content"><h3>Conta King 1</h3><p>Descrição King 1</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=King+2" alt=""><div class="card-content"><h3>Conta King 2</h3><p>Descrição King 2</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=King+3" alt=""><div class="card-content"><h3>Conta King 3</h3><p>Descrição King 3</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=King+4" alt=""><div class="card-content"><h3>Conta King 4</h3><p>Descrição King 4</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=King+5" alt=""><div class="card-content"><h3>Conta King 5</h3><p>Descrição King 5</p><a href="#">Comprar</a></div></div>
+        <div class="card"><img src="https://via.placeholder.com/500x200?text=King+6" alt=""><div class="card-content"><h3>Conta King 6</h3><p>Descrição King 6</p><a href="#">Comprar</a></div></div>
+      </div>
+    </div>
 
-        function showSection(sectionId) {
-            // Hide all sections
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-        }
+  </section>
 
-        function addToCart(productName, price) {
-            const existingItem = cart.find(item => item.name === productName);
-            
-            if (existingItem) {
-                existingItem.quantity++;
-            } else {
-                cart.push({
-                    name: productName,
-                    price: price,
-                    quantity: 1
-                });
-            }
-            
-            updateCart();
-            
-            // Visual feedback
-            const buttons = document.querySelectorAll('.add-to-cart');
-            buttons.forEach(btn => {
-                if (btn.onclick.toString().includes(productName)) {
-                    btn.style.background = '#4CAF50';
-                    btn.textContent = 'Adicionado!';
-                    setTimeout(() => {
-                        btn.style.background = '#764ba2';
-                        btn.textContent = 'Adicionar ao Carrinho';
-                    }, 1000);
-                }
-            });
-        }
+  <!-- CONTATO -->
+  <section id="contato" class="section">
+    <div class="contact-info">
+      <h2>Fale Conosco</h2>
+      <p>📞 Telefone/WhatsApp: 12 98250-9357</p>
+      <p>📧 Email: ninjalabs.nl@gmail.com</p>
+    </div>
+  </section>
 
-        function removeFromCart(productName) {
-            cart = cart.filter(item => item.name !== productName);
-            updateCart();
-        }
+  <footer>
+    <p>&copy; 2025 Ultimate Ninja - Todos os direitos reservados.</p>
+  </footer>
 
-        function updateCart() {
-            cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-            cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-            
-            document.getElementById('cart-count').textContent = cartCount;
-            
-            const cartItems = document.getElementById('cart-items');
-            const cartTotalElement = document.getElementById('cart-total');
-            const checkoutBtn = document.getElementById('checkout-btn');
-            
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<p>Seu carrinho está vazio.</p>';
-                cartTotalElement.style.display = 'none';
-                checkoutBtn.style.display = 'none';
-            } else {
-                cartItems.innerHTML = cart.map(item => `
-                    <div class="cart-item">
-                        <div>
-                            <h4>${item.name}</h4>
-                            <p>Quantidade: ${item.quantity}</p>
-                            <p>R$ ${item.price.toLocaleString('pt-BR')}</p>
-                        </div>
-                        <button onclick="removeFromCart('${item.name}')" style="background: #ff4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
-                            Remover
-                        </button>
-                    </div>
-                `).join('');
-                
-                document.getElementById('total-amount').textContent = cartTotal.toLocaleString('pt-BR');
-                cartTotalElement.style.display = 'block';
-                checkoutBtn.style.display = 'block';
-            }
-        }
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+      });
+      const target = document.getElementById(id);
+      target.classList.add('active');
 
-        function checkout() {
-            if (cart.length === 0) {
-                alert('Seu carrinho está vazio!');
-                return;
-            }
-            
-            alert(`Compra finalizada! Total: R$ ${cartTotal.toLocaleString('pt-BR')}\n\nObrigado por comprar na TechStore!`);
-            cart = [];
-            updateCart();
-        }
+      if (id === 'contas') {
+        setTimeout(() => {
+          animateCards();
+        }, 300);
+      }
+    }
 
-        // Form submission
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Mensagem enviada com sucesso! Responderemos em breve.');
-            this.reset();
-        });
-    </script>
+    function animateCards() {
+      const cards = document.querySelectorAll('#contas .card');
+      cards.forEach((card, i) => {
+        setTimeout(() => {
+          card.classList.add('visible');
+        }, i * 100);
+      });
+    }
+
+    // Criar partículas flutuantes
+    function createParticles() {
+      const container = document.querySelector('.floating-particles');
+      for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        container.appendChild(particle);
+      }
+    }
+
+    // Inicializar partículas
+    createParticles();
+
+    // Animação inicial dos cards
+    window.addEventListener('load', () => {
+      if (document.getElementById('contas').classList.contains('active')) {
+        animateCards();
+      }
+    });
+  </script>
+
 </body>
 </html>
